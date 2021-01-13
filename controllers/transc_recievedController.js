@@ -70,7 +70,7 @@ exports.store = async (req, res, next) => {
       console.log(amount_recieved, amount_to_recieve);
     const filter = { _id: _id };
     const update = {
-      amount_recieved: amount_recieved + r_cash + r_transfer,
+      amount_recieved: parseFloat(amount_recieved) + parseFloat(r_cash) + parseFloat(r_transfer),
     };
     const opts = { new: true, upsert: true };
   
