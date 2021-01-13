@@ -75,10 +75,10 @@ exports.store = async (req, res, next) => {
       
       let { amount_given, amount_to_given } = await Customer_transc.findById(_id);
 
-      const given = amount_given + g_cash + g_transfer;
+      const given_ = amount_given + g_cash + g_transfer;
     const filter = { _id: _id };
     const update = {
-      amount_given: given,
+      amount_given: given_,
     };
     const opts = { new: true, upsert: true };
   
