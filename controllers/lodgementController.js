@@ -103,3 +103,35 @@ exports.lodgementUpdate = async (req, res, next) => {
     next(error);
   }
 };
+
+exports.show = async (req, res) => {
+  try {
+    const pagination = req.query.pagination
+      ? parseInt(req.query.pagination)
+      : 10;
+    const page = req.query.page ? parseInt(req.query.page) : 1;
+
+    const banks = await Lodgement.find({})
+      .skip((page - 1) * pagination)
+      .limit(pagination)
+      .populate("user")
+      .sort({ createdAt: -1 });
+
+    const stringData = JSON.stringify(banks,["_id", "currency", "amount", "type", "status"])
+    res.send(stringData);
+  } catch (err) {
+    next(err);
+  }
+};
+
+exports.fetchById = async (req, res, next) => {
+  try {
+    const customer_transc = await Lodgement.findOne({
+      _id: req.params.id,
+    }).populate("user");
+
+    res.send(customer_transc);
+  } catch (err) {
+    next(err);
+  }
+}
