@@ -62,4 +62,5 @@ app.use(errorHandler);
 
 app.listen(config.port, () => {
   console.log("Listening...");
+  console.log("Database_URL", process.env.DATABASE_URL);
 });
