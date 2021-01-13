@@ -75,7 +75,9 @@ exports.store = async (req, res, next) => {
       
       let { amount_given, amount_to_given } = await Customer_transc.findById(_id);
 
-      const given_ = amount_given + g_cash + g_transfer;
+      const given_ = parseFloat(amount_given) + parseFloat(g_cash) + parseFloat(g_transfer);
+
+      console.log(given_);
     const filter = { _id: _id };
     const update = {
       amount_given: given_,
