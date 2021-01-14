@@ -67,7 +67,7 @@ exports.pending = async (req, res, next) => {
 
 exports.lodgementUpdate = async (req, res, next) => {
   try {
-    const lodgement = await Lodgement.findOne({ _id: req.body.id });
+    const lodgement = await Lodgement.findOne({ _id: req.params.id });
 
     const {type,currency,bank,amount} = lodgement
 
