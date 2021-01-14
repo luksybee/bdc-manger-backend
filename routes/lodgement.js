@@ -7,7 +7,7 @@ router.get("/", lodgementController.show);
 router.get("/:id", lodgementController.fetchById);
 
 router.post("/", lodgementController.lodgement);
-router.put("/", lodgementController.lodgementUpdate);
+router.put("/:id", lodgementController.lodgementUpdate);
 router.get("/pending", lodgementController.pending);
 
 module.exports = router;
