@@ -3,7 +3,7 @@ const router = express.Router();
 
 const customer_transcController = require("../controllers/customer_transcController");
 
-router.get("/all", customer_transcController.all);
+router.get("/", customer_transcController.all);
 router.get("/:id", customer_transcController.show);
 router.get("/pending/recieve", customer_transcController.pendingRecieve);
 router.get("/pending/give", customer_transcController.pendingGive);
