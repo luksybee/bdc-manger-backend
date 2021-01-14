@@ -18,7 +18,10 @@ exports.cashier = async (req, res) => {
       .limit(pagination)
       .populate("bank")
       .sort({ createdAt: -1 });
-    res.send(banks);
+
+      const stringData = JSON.stringify(banks,["currency", "balance"])
+
+    res.send(stringData);
   } catch (err) {
     next(err);
   }
