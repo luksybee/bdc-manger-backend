@@ -3,7 +3,7 @@ const Recieved = require("../models/transc_recieved");
 const Given = require("../models/transc_given");
 const validationHandler = require("../validations/validationHandler");
 
-exports.all = async (req, res) => {
+exports.all = async (req, res, next) => {
   try {
     const pagination = req.query.pagination
       ? parseInt(req.query.pagination)
