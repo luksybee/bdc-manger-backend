@@ -50,22 +50,30 @@ exports.store = async (req, res, next) => {
       recieved.r_cash = r_cash;
       recieved.r_transfer = r_transfer;
       recieved.r_currency = r_currency;
-      recieved.r_method = r_method;
+      // recieved.r_method = r_method;
       recieved.r_remarks = r_remarks;
       recieved.transaction_id = _id;
       recieved.r_to = r_to;
   
-      if (r_method == "cash") {
+      let method = ""
+      if (r_transfer > 0) {
+        method = "both"
+        recieved.r_method = method;
+
+      }else{
+        method = "cash" 
+        recieved.r_method = method;
         recieved.r_status = "completed"
       }
+ 
       await recieved.save();
-      if (r_method == "cash" || r_method == "both") {
+
+      const { amount_recieved, amount_to_recieve, currency_recieved } = await Customer_transc.findById(_id);
+      if (method == "cash" || method == "both") {
         // add amount to cashier balance
-        await addToCashier(r_currency, r_cash);
+        await addToCashier(currency_recieved, r_cash);
       }
       
-      console.log(_id);
-      const { amount_recieved, amount_to_recieve } = await Customer_transc.findById(_id);
 
       console.log(amount_recieved, amount_to_recieve);
     const filter = { _id: _id };
