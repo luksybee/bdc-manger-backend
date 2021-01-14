@@ -84,11 +84,11 @@ exports.store = async (req, res, next) => {
         await deductFromCashier(currency_given, g_cash);
 
       }
-      
+      console.log("Given amount",amount_given);
 
-      const given_ = parseFloat(amount_given) + parseFloat(currency_given) + parseFloat(g_transfer);
+      const given_ = parseFloat(amount_given) + parseFloat(g_cash) + parseFloat(g_transfer);
 
-      console.log(given_);
+      console.log("Given Total",given_);
     const filter = { _id: _id };
     const update = {
       amount_given: given_,
