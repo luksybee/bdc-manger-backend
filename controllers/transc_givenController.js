@@ -49,7 +49,7 @@ exports.store = async (req, res, next) => {
       given.g_cash = g_cash;
       given.g_transfer = g_transfer;
       given.g_currency = g_currency;
-      given.g_method = g_method;
+      // given.g_method = g_method;
       given.g_remarks = g_remarks;
       given.transaction_id = _id;
 
@@ -61,21 +61,32 @@ exports.store = async (req, res, next) => {
       given.g_acct_no = g_acct_no;
 
 
-      if (g_method == "cash") {
-        given.status = "completed"
+      let method = ""
+      if (g_transfer > 0) {
+        method = "both"
+        given.g_method = method;
+
+      }else{
+        method = "cash" 
+        given.g_method = method;
+        given.g_status = "completed"
       }
+
+      // if (g_method == "cash") {
+      //   given.status = "completed"
+      // }
       
       given = await given.save();
       //.................................................................
 
-      if (g_method == "cash" || "both") {
-        await deductFromCashier(g_currency, g_cash);
+      let { amount_given, amount_to_given,currency_given } = await Customer_transc.findById(_id);
+      if (method == "cash" || "both") {
+        await deductFromCashier(currency_given, g_cash);
 
       }
       
-      let { amount_given, amount_to_given } = await Customer_transc.findById(_id);
 
-      const given_ = parseFloat(amount_given) + parseFloat(g_cash) + parseFloat(g_transfer);
+      const given_ = parseFloat(amount_given) + parseFloat(currency_given) + parseFloat(g_transfer);
 
       console.log(given_);
     const filter = { _id: _id };
