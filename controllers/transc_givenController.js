@@ -121,22 +121,24 @@ exports.update = async (req, res, next) => {
   try {
     validationHandler(req);
 
-    let transc_given = await Transc_given.findOne({
-      transaction_id: req.body.transaction_id,
-    });
+    const {g_from, _id} = req.body;
+    
+    let transc_given = await Transc_given.findById(_id);
 
-    const g_transactionMethod = transc_given.g_method;
+    const {transaction_id, g_transfer, g_method} = transc_given;
+
+    const {currency_given, } = await Customer_transc.findById(transaction_id)
 
     // GIVE
-    if (g_transactionMethod == "transfer") {
-      deductFromBank(req.body.g_from, transc_given.g_currency, req.body.g_amount);
-      transc_given.g_from = req.body.g_from;
-      // transc_given.g_currency = req.body.g_currency;
-      transc_given.g_amount = req.body.g_amount;
-      transc_given.status = "completed";
-      transc_given.save();
+    if (g_method == "transfer" || "both") {
+      deductFromBank(g_from, currency_given, g_transfer);
     }
 
+    // transc_given.g_from = req.body.g_from;
+    // transc_given.g_currency = req.body.g_currency;
+    // transc_given.g_amount = req.body.g_amount;
+    transc_given.g_status = "completed";
+    transc_given.save();
     res.send("Success");
   } catch (err) {
     next(err);
