@@ -106,19 +106,20 @@ exports.update = async (req, res, next) => {
   try {
     validationHandler(req);
 
-    const { transaction_id,r_to, r_amount } = req.body
+    const { _id,r_to } = req.body
 
-    let transc_recieved = await Transc_recieved.findOne({
-      transaction_id: transaction_id,
-    });
+    let transc_recieved = await Transc_recieved.findById(_id)
 
-    const r_transactionMethod = transc_recieved.r_method;
+    const {transaction_id, r_transfer, r_method} = transc_recieved;
+
+    const {currency_recieved } = await Customer_transc.findById(transaction_id)
+
     // RECIEVE
-    if (r_transactionMethod == "transfer") {
-      addToBank(r_to, transc_recieved.r_currency, r_amount);
-      transc_recieved.r_to = r_to;
+    if (r_method == "transfer" || "both") {
+      addToBank(r_to, currency_recieved, r_transfer);
+      // transc_recieved.r_to = r_to;
       // transc_recieved.r_currency = req.body.r_currency;
-      transc_recieved.r_amount = r_amount;
+      // transc_recieved.r_amount = r_amount;
       transc_recieved.r_status = "completed";
       transc_recieved.save();
     }
