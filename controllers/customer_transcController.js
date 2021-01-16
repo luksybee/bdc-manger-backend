@@ -13,9 +13,12 @@ exports.all = async (req, res, next) => {
     const customer_transcs = await Customer_transc.find({})
       .skip((page - 1) * pagination)
       .limit(pagination)
-      .populate("customer_transc")
+      .populate("cashier")
       .sort({ createdAt: -1 });
-    res.send(customer_transcs);
+
+      const stringData = JSON.stringify(customer_transcs,["_id","customer", "type", "rate", "amount","currency_recieved", "amount_recieved","r_status","currency_given", "amount_given","g_status"])
+
+    res.send(stringData);
   } catch (err) {
     next(err);
   }
