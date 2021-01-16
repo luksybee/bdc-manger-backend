@@ -17,7 +17,7 @@ const addToBank = async (acct_no, currency, amount) => {
   // } catch (error) {}
 
   try {
-    const existingCurrency = await Bank_balance.findOne({currency, acct_no});
+    const existingCurrency = await Bank_balance.findById(acct_no);
     console.log(existingCurrency);
     if (existingCurrency) {
       const filter = { _id: existingCurrency._id };
@@ -55,10 +55,8 @@ const deductFromBank = async (acct_no, currency, amount) => {
   //   const result = Cashier_balance.findOneAndUpdate({currency: currency, bank: bank_id}, {balance:balance-amount}, {new:true})
   //   console.log(result);
   // } catch (error) {}
-
   try {
-    const existingCurrency = await Bank_balance.findOne({currency, acct_no});
-    console.log(existingCurrency);
+    const existingCurrency = await Bank_balance.findById(acct_no);
     if (existingCurrency) {
       const filter = { _id: existingCurrency._id };
       const update = {
