@@ -25,8 +25,19 @@ exports.create = async (req, res) => {
 
 exports.accounts = async (req, res, next) => {
   try {
-    const banks = await Bank_balance.find({});
-    res.send(banks);
+    const pagination = req.query.pagination
+      ? parseInt(req.query.pagination)
+      : 10;
+    const page = req.query.page ? parseInt(req.query.page) : 1;
+
+    const banks = await Bank_balance.find({})
+      .skip((page - 1) * pagination)
+      .limit(pagination)
+      .sort({ createdAt: -1 });
+
+      const stringData = JSON.stringify(banks,["acct_no", "acct_name", "currency","bank","balance"])
+
+    res.send(stringData);
   } catch (err) {
     next(err);
   }
