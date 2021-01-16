@@ -6,9 +6,8 @@ const transc_givenController = require("../controllers/transc_givenController");
 router.get("/", transc_givenController.index);
 
 router.get("/:id", transc_givenController.show);
-router.post("/", transc_givenController.store
-);
-router.patch("/:id", transc_givenController.update);
+router.post("/", transc_givenController.store);
+router.patch("/", transc_givenController.update);
 router.delete("/:id", transc_givenController.delete);
 
 module.exports = router;
