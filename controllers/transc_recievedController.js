@@ -74,8 +74,6 @@ exports.store = async (req, res, next) => {
         await addToCashier(currency_recieved, r_cash);
       }
       
-
-      console.log(amount_recieved, amount_to_recieve);
     const filter = { _id: _id };
     const update = {
       amount_recieved: parseFloat(amount_recieved) + parseFloat(r_cash) + parseFloat(r_transfer),
