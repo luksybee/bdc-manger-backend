@@ -12,7 +12,7 @@ const UserSchema = new Schema(
     userType: {
       type: String,
 
-      enum: ["user", "cashier", "admin", "transfer", "vault"],
+      enum: ["user", "cashier", "admin", "transfer","account", "vault"],
 
       default: "user",
     },
