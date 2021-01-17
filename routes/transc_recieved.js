@@ -7,7 +7,7 @@ router.get("/", transc_recievedController.index);
 
 router.get("/:id", transc_recievedController.show);
 router.post("/", transc_recievedController.store);
-router.patch("/", transc_recievedController.update);
+router.put("/:id", transc_recievedController.update);
 router.delete("/:id", transc_recievedController.delete);
 
 module.exports = router;
