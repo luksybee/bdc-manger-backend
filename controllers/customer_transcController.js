@@ -60,7 +60,7 @@ exports.pendingGive = async (req, res) => {
       .populate("user")
       .sort({ createdAt: -1 });
 
-      const stringData = JSON.stringify(customer_transcs,["_id", "g_transfer", "g_status","createdAt"])
+      const stringData = JSON.stringify(customer_transcs,["_id", "g_transfer", "g_status","createdAt","g_acct_name","g_acct_no","g_bank"])
 
     res.send(stringData);
   } catch (err) {
