@@ -17,8 +17,9 @@ const addToBank = async (acct_no, currency, amount) => {
   // } catch (error) {}
 
   try {
-    const existingCurrency = await Bank_balance.findById(acct_no);
-    console.log(existingCurrency);
+    console.log("starting",acct_no);
+    const existingCurrency = await Bank_balance.findOne({acct_no:acct_no});
+    console.log("record",existingCurrency);
     if (existingCurrency) {
       const filter = { _id: existingCurrency._id };
       const update = {
@@ -41,7 +42,7 @@ const addToBank = async (acct_no, currency, amount) => {
     //   // res.send(v);
     // }
   } catch (error) {
-    // next(err)
+    console.log(error);
   }
 };
 /*
@@ -56,7 +57,7 @@ const deductFromBank = async (acct_no, currency, amount) => {
   //   console.log(result);
   // } catch (error) {}
   try {
-    const existingCurrency = await Bank_balance.findById(acct_no);
+    const existingCurrency = await Bank_balance.findOne({acct_no:acct_no});
     if (existingCurrency) {
       const filter = { _id: existingCurrency._id };
       const update = {
@@ -79,7 +80,7 @@ const deductFromBank = async (acct_no, currency, amount) => {
     //   // res.send(v);
     // }
   } catch (error) {
-    // next(err)
+    console.log(error);
   }
 };
 /*
