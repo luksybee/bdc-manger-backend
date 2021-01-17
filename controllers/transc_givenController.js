@@ -122,7 +122,7 @@ exports.update = async (req, res, next) => {
     validationHandler(req);
 
     const {g_from, _id} = req.body;
-    
+    console.log("accout", g_from);
     let transc_given = await Transc_given.findById(_id);
 
     const {transaction_id, g_transfer, g_method} = transc_given;
