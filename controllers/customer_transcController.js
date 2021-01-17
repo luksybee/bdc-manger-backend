@@ -37,7 +37,10 @@ exports.pendingRecieve = async (req, res) => {
       .limit(pagination)
       .populate("user")
       .sort({ createdAt: -1 });
-    res.send(customer_transcs);
+
+      const stringData = JSON.stringify(customer_transcs,["_id", "r_transfer", "r_status","createdAt"])
+
+    res.send(stringData);
   } catch (err) {
     next(err);
   }
@@ -56,7 +59,10 @@ exports.pendingGive = async (req, res) => {
       .limit(pagination)
       .populate("user")
       .sort({ createdAt: -1 });
-    res.send(customer_transcs);
+
+      const stringData = JSON.stringify(customer_transcs,["_id", "g_transfer", "g_status","createdAt"])
+
+    res.send(stringData);
   } catch (err) {
     next(err);
   }
