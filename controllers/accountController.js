@@ -119,3 +119,16 @@ exports.bankSub = async (req, res, next) => {
 //     next(err);
 //   }
 // };
+
+exports.delete = async (req, res, next) => {
+  try {
+    console.log("starting Del", req.params);
+    let customer_transc = await Bank_balance.findOne({acct_no: req.params.id});
+
+    await customer_transc.delete();
+
+    res.send({ message: "success" });
+  } catch (err) {
+    next(err);
+  }
+};
