@@ -3,6 +3,7 @@ const Vault_balance = require("../models/vault_balance");
 const Cashier_balance = require("../models/cashier_balance");
 const validationHandler = require("../validations/validationHandler");
 const _ = require("lodash");
+const bank_balance = require("../models/bank_balance");
 
 exports.create = async (req, res) => {
 
@@ -120,6 +121,18 @@ exports.bankSub = async (req, res, next) => {
 //   }
 // };
 
+
+exports.banks = async (req, res, next) => {
+  try {
+      const customer_transcs = await bank_balance.distinct("bank")
+      res.status(200).json({
+        message: "Banks retrieved",
+        data:customer_transcs
+      } )
+      } catch (err) {
+    next(err);
+  }
+};
 exports.delete = async (req, res, next) => {
   try {
     console.log("starting Del", req.params);

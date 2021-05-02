@@ -68,35 +68,21 @@ exports.store = async (req, res, next) => {
  
       await recieved.save();
 
-      const { amount_recieved, amount_to_recieve, currency_recieved } = await Customer_transc.findById(_id);
+      const { amount_to_recieve, currency_recieved } = await Customer_transc.findById(_id);
       if (method == "cash" || method == "both") {
         // add amount to cashier balance
         await addToCashier(currency_recieved, r_cash);
       }
       
-    const filter = { _id: _id };
-    const update = {
-      amount_recieved: parseFloat(amount_recieved) + parseFloat(r_cash) + parseFloat(r_transfer),
-    };
-    const opts = { new: true, upsert: true };
-  
-    const data = await Customer_transc.findOneAndUpdate(filter, update, opts);
-
-    const amount_recieved1 = data.amount_recieved
-    //...............
-    if (amount_recieved1 == amount_to_recieve) {
-      
-      const filter = { _id: _id };
-      const update = {
-        r_status: "completed",
-      };
-      const opts = { new: true };
-      
-      doc = await Customer_transc.findOneAndUpdate(filter, update, opts);
-      res.send(doc);
+    const val = parseFloat(r_cash) + parseFloat(r_transfer);    
+   
+    if (val == amount_to_recieve) {  
+      await Customer_transc.update({_id: _id },{$inc: {amount_recieved : val},r_status:"completed"})
+    }else{
+      await Customer_transc.update({_id: _id },{$inc: {amount_recieved : val}})
     }
 
-    res.send(data)
+    res.send("ok")
   } catch (err) {
     next(err);
   }

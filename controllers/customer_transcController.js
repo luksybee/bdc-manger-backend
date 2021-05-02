@@ -2,6 +2,7 @@ const Customer_transc = require("../models/customer_transc");
 const Recieved = require("../models/transc_recieved");
 const Given = require("../models/transc_given");
 const validationHandler = require("../validations/validationHandler");
+const bank_balance = require("../models/bank_balance");
 
 exports.all = async (req, res, next) => {
   try {
@@ -45,6 +46,124 @@ exports.pendingRecieve = async (req, res) => {
     next(err);
   }
 };
+
+exports.receivable = async (req, res, next) => {
+  try {
+    
+    const customer_transcs = await Given.aggregate(
+      [
+        {
+          $match:{
+            g_status: "pending"
+          },
+        },
+        {
+          $group:
+            {
+              _id: { type:"$g_method", status: "$g_status"},
+              cash: { $sum: "$g_cash"}, 
+              transfer: {$sum: "$g_transfer" },
+              count: { $sum: 1 }
+            }
+        }
+      ]
+   )
+      .sort({ createdAt: -1 });
+
+      // const stringData = JSON.stringify(customer_transcs,["_id", "r_transfer", "r_status","createdAt"])
+
+      // const customer_transcs = await bank_balance.aggregate(
+      //   [
+      //     {
+      //       $group:{
+      //         _id: {currency: "$currency", bank: "$bank"},
+      //         total: {$sum: "$balance"}
+      //       }
+      //     }
+      //   ]
+      // )
+      // const customer_transcs = await bank_balance.distinct("bank")
+      res.status(200).json({
+        message: "Receivable retrieved",
+        data:customer_transcs
+      } )
+      } catch (err) {
+    next(err);
+  }
+};
+
+exports.payable = async (req, res) => {
+  try {
+    
+    const customer_transcs = await Recieved.aggregate(
+      [
+        {
+          $match:{
+            r_status: "pending"
+          },
+        },
+        {
+          $group:
+            {
+              _id: { type:"$r_method", status: "$r_status"},
+              cash: { $sum: "$r_cash"}, 
+              transfer: {$sum: "$r_transfer" },
+              count: { $sum: 1 }
+            }
+        }
+      ]
+   )
+      .sort({ createdAt: -1 });
+
+  res.status(200).json({
+    message: "Payable retrieved",
+    data:customer_transcs
+  } )
+}catch (err) {
+    next(err);
+  }
+};
+
+exports.customerSummary = async (req, res) => {
+  try {
+    
+    const customer_transcs = await Recieved.aggregate(
+      [
+        // {
+        //   $match:{
+        //     r_status: "pending"
+        //   },
+        // },
+        {
+          $group:
+            {
+              _id: "$transaction_id",
+              cash: { $sum: "$r_cash"}, 
+              transfer: {$sum: "$r_transfer" },
+              count: { $sum: 1 }
+            }
+        }
+      ]
+   )
+      .sort({ createdAt: -1 });
+
+  res.status(200).json({
+    message: "Customer Summary retrieved",
+    data:customer_transcs
+  } )
+}catch (err) {
+    next(err);
+  }
+};
+
+exports.todayBuy = async (req, res) => {
+  
+};
+
+exports.todaySell = async (req, res) => {
+  
+};
+
 exports.pendingGive = async (req, res) => {
   try {
     const pagination = req.query.pagination
@@ -113,7 +232,7 @@ exports.completed = async (req, res) => {
   }
 };
 
-exports.show = async (req, res) => {
+exports.show = async (req, res, next) => {
   try {
     const customer_transc = await Customer_transc.findOne({
       _id: req.params.id,

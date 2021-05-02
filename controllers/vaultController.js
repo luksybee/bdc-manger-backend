@@ -52,7 +52,6 @@ exports.load = async (req, res, next) => {
   // }
 
   const data = await addToVault(currency, amount)
-  console.log(data);
   res.send(data)
 }
 
