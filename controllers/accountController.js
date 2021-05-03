@@ -48,41 +48,18 @@ exports.grouped = async (req, res, next) => {
   try {
     const bank = req.query.bank;
     const currency = req.query.currency;
-    // let banks_;
-
-    // const array = banks_;
-
-    // const key = "acct_name";
-
-    // const arrayUniqueByKey = [
-    //   ...new Map(array.map((item) => [item[key], item])).values(),
-    // ];
-
-    // console.log(arrayUniqueByKey);
-
-    // if (currency == "NGN") {
-    //   banks_ = await Bank_balance.find({
-    //     bank: bank,
-    //     currency: currency,
-    //   }).select("acct_name");
-    // } else {
-    //   banks_ = await Bank_balance.find({
-    //     bank: bank,
-    //     currency: currency,
-    //   });
-    // }
-
+    
     console.log(bank, currency);
     const banks_ = await Bank_balance.find({
-      bank: bank,
-      currency: currency,
+      bank,
+      currency
     });
-    const value = _.uniqBy(banks_, "acct_name");
+    // const value = _.uniqBy(banks_, "acct_name");
     console.log(banks_);
 
-    // res.send(banks_);
+    res.send(banks_);
     // res.send(arrayUniqueByKey);
-    res.send(value);
+    // res.send(value);
   } catch (err) {
     next(err);
   }
