@@ -101,7 +101,7 @@ exports.bankSub = async (req, res, next) => {
 
 exports.banks = async (req, res, next) => {
   try {
-      const customer_transcs = await bank_balance.distinct({currency: req.params.currency})
+      const customer_transcs = await bank_balance.distinct("bank")
       res.status(200).json({
         message: "Banks retrieved",
         data:customer_transcs
